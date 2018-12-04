@@ -1,9 +1,9 @@
 package edu.mum.bigdata.spark.mo;
 
+import org.apache.log4j.Logger;
+
 import java.io.Serializable;
 import java.lang.String;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
  * See http://httpd.apache.org/docs/2.2/logs.html for more details.
  */
 public class ApacheAccessLog implements Serializable {
-  private static final Logger logger = Logger.getLogger("Access");
+
+  private static Logger log = Logger.getLogger(App.class);
 
   private String ipAddress;
   private String clientIdentd;
@@ -121,7 +122,7 @@ public class ApacheAccessLog implements Serializable {
   public static ApacheAccessLog parseFromLogLine(String logline) {
     Matcher m = PATTERN.matcher(logline);
     if (!m.find()) {
-      logger.log(Level.ALL, "Cannot parse logline" + logline);
+      log.error("Cannot parse logline" + logline);
       throw new RuntimeException("Error parsing logline");
     }
 

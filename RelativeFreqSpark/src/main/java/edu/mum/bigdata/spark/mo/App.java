@@ -1,19 +1,11 @@
 
 package edu.mum.bigdata.spark.mo;
 
-import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.*;
@@ -96,16 +88,13 @@ public class App {
 					}
 
 				})
-				.flatMap(new FlatMapFunction<Tuple2<String, String>, Tuple2<String, String>>(){
-
+				.flatMap(new FlatMapFunction<Tuple2<String, String>, Tuple2<String, String>>() {
 					@Override
-					public Iterable<Tuple2<String, String>> call(
-							Tuple2<String, String> arg0) throws Exception {
+					public Iterator<Tuple2<String, String>> call(Tuple2<String, String> arg0)  {
 						List<Tuple2<String, String>> ret = new ArrayList<Tuple2<String, String>>();
 						ret.add(arg0);
-						return ret;
+						return ret.iterator();
 					}
-					
 				})
 				.mapToPair(
 						new PairFunction<Tuple2<String, String>, String, List<String>>() {
@@ -145,14 +134,14 @@ public class App {
 			}}).flatMap(new FlatMapFunction<List<Tuple3<String, String, Integer>>, Tuple3<String, String, Integer>>(){
 
 				@Override
-				public Iterable<Tuple3<String, String, Integer>> call(
+				public Iterator<Tuple3<String, String, Integer>> call(
 						List<Tuple3<String, String, Integer>> t)
 						throws Exception {
-					ArrayList<Tuple3<String, String, Integer>> al = new ArrayList<Tuple3<String, String, Integer>>();
+					List<Tuple3<String, String, Integer>> al = new ArrayList<Tuple3<String, String, Integer>>();
 					for(Tuple3<String, String, Integer> ta:t){
 						al.add(ta);
 					}
-					return al;
+					return al.iterator();
 				}
 		
 			})/*.filter(new Function<Tuple3<String, String, Integer>, Boolean>(){
